@@ -1,0 +1,30 @@
+launch:
+
+- arg:
+    name: "A"
+    default: "1"
+- arg:
+    name: "B"
+    default: "2"
+
+- node:
+    pkg: "beginner_tutorials"
+    exec: "talker"
+    name: "my_talker"
+
+- node:
+    pkg: "beginner_tutorials"
+    exec: "listener"
+    name: "my_listener"
+
+- node:
+    pkg: "beginner_tutorials"
+    exec: "client"
+    name: "my_client"
+    param:
+    -
+      name: "A"
+      value: $(var A)
+    -
+      name: "B"
+      value: $(var B)

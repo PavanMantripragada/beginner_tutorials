@@ -38,5 +38,6 @@ int main(int argc, char* argv[]) {
   rclcpp::init(argc, argv);
   rclcpp::spin(std::make_shared<MinimalSubscriber>());
   rclcpp::shutdown();
+  RCLCPP_FATAL_STREAM(rclcpp::get_logger("rclcpp"), "Subscriber died!");
   return 0;
 }

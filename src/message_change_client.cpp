@@ -11,18 +11,17 @@ int main(int argc, char **argv)
 {
   rclcpp::init(argc, argv);
 
-  if (argc != 3) {
-      RCLCPP_WARN_STREAM(rclcpp::get_logger("rclcpp"), "usage: add_two_ints_client X Y");
-      return 1;
-  }
-
   std::shared_ptr<rclcpp::Node> node = rclcpp::Node::make_shared("message_change_client");
   rclcpp::Client<example_interfaces::srv::AddTwoInts>::SharedPtr client =
     node->create_client<example_interfaces::srv::AddTwoInts>("change_message");
 
   auto request = std::make_shared<example_interfaces::srv::AddTwoInts::Request>();
-  request->a = atoll(argv[1]);
-  request->b = atoll(argv[2]);
+  node->declare_parameter("A",1);
+  node->declare_parameter("B",1);
+  int A = node->get_parameter("A").get_parameter_value().get<int>();
+  int B = node->get_parameter("B").get_parameter_value().get<int>();
+  request->a = A;
+  request->b = B;
 
   while (!client->wait_for_service(1s)) {
     if (!rclcpp::ok()) {
