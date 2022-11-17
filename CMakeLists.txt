@@ -9,20 +9,22 @@ endif()
 find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(std_msgs REQUIRED)
+find_package(example_interfaces REQUIRED)
 
 add_executable(talker src/publisher_member_function.cpp)
-ament_target_dependencies(talker rclcpp std_msgs)
-
-install(TARGETS
-  talker
-  DESTINATION lib/${PROJECT_NAME})
+ament_target_dependencies(talker rclcpp std_msgs example_interfaces)
 
 add_executable(listener src/subscriber_member_function.cpp)
 ament_target_dependencies(listener rclcpp std_msgs)
 
+add_executable(client src/message_change_client.cpp)
+ament_target_dependencies(client
+  rclcpp example_interfaces)
+
 install(TARGETS
   talker
   listener
+  client
   DESTINATION lib/${PROJECT_NAME})
 
 if(BUILD_TESTING)
