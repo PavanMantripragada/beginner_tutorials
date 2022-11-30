@@ -11,6 +11,8 @@
 
 #include "rclcpp/rclcpp.hpp"
 #include "std_msgs/msg/string.hpp"
+#include "geometry_msgs/msg/transform_stamped.hpp"
+#include "tf2_ros/static_transform_broadcaster.h"
 
 using namespace std::chrono_literals;
 using std::placeholders::_1;
@@ -31,6 +33,8 @@ class MinimalPublisher : public rclcpp::Node {
         std::bind(&MinimalPublisher::change, this, _1, _2);
     service_ = this->create_service<example_interfaces::srv::AddTwoInts>(
         "change_message", serviceCallbackPtr);
+    tf_static_broadcaster_ = std::make_shared<tf2_ros::StaticTransformBroadcaster>(this);
+    this->make_transforms();
     timer_ = this->create_wall_timer(
         500ms, std::bind(&MinimalPublisher::timer_callback, this));
   }
@@ -69,6 +73,24 @@ class MinimalPublisher : public rclcpp::Node {
         this->get_logger(),
         "sending back response: " << std::to_string(response->sum));
   }
+  void make_transforms()
+  {
+    geometry_msgs::msg::TransformStamped t;
+
+    t.header.stamp = this->get_clock()->now();
+    t.header.frame_id = "world";
+    t.child_frame_id = "talk";
+
+    t.transform.translation.x = 1;
+    t.transform.translation.y = 2;
+    t.transform.translation.z = 3;
+    t.transform.rotation.x = 1;
+    t.transform.rotation.y = 0;
+    t.transform.rotation.z = 0;
+    t.transform.rotation.w = 0;
+
+    tf_static_broadcaster_->sendTransform(t);
+  }
   /** @brief current message that will be published */
   std::string current_message = "My Custom String Message :) ";
   /** @brief timer pointer */
@@ -77,6 +99,7 @@ class MinimalPublisher : public rclcpp::Node {
   rclcpp::Publisher<std_msgs::msg::String>::SharedPtr publisher_;
   /** @brief server pointer */
   rclcpp::Service<example_interfaces::srv::AddTwoInts>::SharedPtr service_;
+  std::shared_ptr<tf2_ros::StaticTransformBroadcaster> tf_static_broadcaster_;
   /** @brief count of no. of msgs published */
   size_t count_;
 };
