@@ -1,3 +1,6 @@
+Done processing ./include/beginner_tutorials/publisher_member_function.hpp
 Done processing ./src/message_change_client.cpp
+Done processing ./src/publisher_main.cpp
 Done processing ./src/publisher_member_function.cpp
 Done processing ./src/subscriber_member_function.cpp
+Done processing ./test/publisher_test.cpp

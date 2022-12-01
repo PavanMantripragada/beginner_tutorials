@@ -9,8 +9,8 @@
 // copies of the Software, and to permit persons to whom the Software is
 // furnished to do so, subject to the following conditions:
 
-// The above copyright notice and this permission notice shall be included in all
-// copies or substantial portions of the Software.
+// The above copyright notice and this permission notice shall be included in
+// all copies or substantial portions of the Software.
 
 // THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 // IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
@@ -27,9 +27,9 @@
 #include <memory>
 #include <string>
 
+#include "geometry_msgs/msg/transform_stamped.hpp"
 #include "rclcpp/rclcpp.hpp"
 #include "std_msgs/msg/string.hpp"
-#include "geometry_msgs/msg/transform_stamped.hpp"
 #include "tf2_ros/static_transform_broadcaster.h"
 
 using namespace std::chrono_literals;
@@ -48,7 +48,7 @@ class MinimalPublisher : public rclcpp::Node {
   MinimalPublisher();
   /** @brief current message that will be published */
   std::string current_message = "My Custom String Message :) ";
- 
+
  private:
   /**
    * @brief Call back function
