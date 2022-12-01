@@ -3,31 +3,9 @@
  * Pavan Mantripragada
  */
 
-#include <chrono>
-#include <example_interfaces/srv/add_two_ints.hpp>
-#include <functional>
-#include <memory>
-#include <string>
+#include "beginner_tutorials/publisher_member_function.hpp"
 
-#include "rclcpp/rclcpp.hpp"
-#include "std_msgs/msg/string.hpp"
-#include "geometry_msgs/msg/transform_stamped.hpp"
-#include "tf2_ros/static_transform_broadcaster.h"
-
-using namespace std::chrono_literals;
-using std::placeholders::_1;
-using std::placeholders::_2;
-/**
- * @brief A publisher cum server
- * class
- */
-class MinimalPublisher : public rclcpp::Node {
- public:
-  /**
-   * @brief Constructor
-   * for MinimalPublisher
-   */
-  MinimalPublisher() : Node("minimal_publisher"), count_(0) {
+MinimalPublisher::MinimalPublisher() : Node("minimal_publisher"), count_(0) {
     publisher_ = this->create_publisher<std_msgs::msg::String>("topic", 10);
     auto serviceCallbackPtr =
         std::bind(&MinimalPublisher::change, this, _1, _2);
@@ -39,26 +17,14 @@ class MinimalPublisher : public rclcpp::Node {
         500ms, std::bind(&MinimalPublisher::timer_callback, this));
   }
 
- private:
-  /**
-   * @brief Call back function
-   * to log the published messag
-   * along with the count
-   */
-  void timer_callback() {
+  void MinimalPublisher::timer_callback() {
     auto message = std_msgs::msg::String();
     message.data = current_message + std::to_string(count_++);
     RCLCPP_INFO_STREAM(this->get_logger(), "Publishing: " << message.data);
     publisher_->publish(message);
   }
-  /**
-   * @brief service callback
-   * for responding to th request
-   *
-   * @param request request of the service message
-   * @param response response to the service message
-   */
-  void change(
+
+  void MinimalPublisher::change(
       const std::shared_ptr<example_interfaces::srv::AddTwoInts::Request>
           request,
       std::shared_ptr<example_interfaces::srv::AddTwoInts::Response> response) {
@@ -73,7 +39,8 @@ class MinimalPublisher : public rclcpp::Node {
         this->get_logger(),
         "sending back response: " << std::to_string(response->sum));
   }
-  void make_transforms()
+
+  void MinimalPublisher::make_transforms()
   {
     geometry_msgs::msg::TransformStamped t;
 
@@ -91,23 +58,3 @@ class MinimalPublisher : public rclcpp::Node {
 
     tf_static_broadcaster_->sendTransform(t);
   }
-  /** @brief current message that will be published */
-  std::string current_message = "My Custom String Message :) ";
-  /** @brief timer pointer */
-  rclcpp::TimerBase::SharedPtr timer_;
-  /** @brief publisher pointer */
-  rclcpp::Publisher<std_msgs::msg::String>::SharedPtr publisher_;
-  /** @brief server pointer */
-  rclcpp::Service<example_interfaces::srv::AddTwoInts>::SharedPtr service_;
-  std::shared_ptr<tf2_ros::StaticTransformBroadcaster> tf_static_broadcaster_;
-  /** @brief count of no. of msgs published */
-  size_t count_;
-};
-
-int main(int argc, char* argv[]) {
-  rclcpp::init(argc, argv);
-  rclcpp::spin(std::make_shared<MinimalPublisher>());
-  rclcpp::shutdown();
-  RCLCPP_FATAL_STREAM(rclcpp::get_logger("rclcpp"), "Publisher died!");
-  return 0;
-}
