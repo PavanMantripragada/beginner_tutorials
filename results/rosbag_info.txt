@@ -1,0 +1,11 @@
+Files:             all_topics_0.db3
+Bag size:          30.0 KiB
+Storage id:        sqlite3
+Duration:          14.878s
+Start:             Dec  1 2022 03:39:53.160 (1669865993.160)
+End:               Dec  1 2022 03:40:08.39 (1669866008.39)
+Messages:          76
+Topic information: Topic: /topic | Type: std_msgs/msg/String | Count: 30 | Serialization Format: cdr
+                   Topic: /tf_static | Type: tf2_msgs/msg/TFMessage | Count: 1 | Serialization Format: cdr
+                   Topic: /parameter_events | Type: rcl_interfaces/msg/ParameterEvent | Count: 0 | Serialization Format: cdr
+                   Topic: /rosout | Type: rcl_interfaces/msg/Log | Count: 45 | Serialization Format: cdr
